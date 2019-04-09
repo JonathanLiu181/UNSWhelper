@@ -344,7 +344,7 @@ app.intent('assessment.card', (conv, params, option) => {
 });
 
 app.intent('assessment.card - yes', (conv) => {
-	conv.ask('Here is a plan for your assignment. Would you like me to add it to your calendar?')
+	conv.ask('Here is a plan for your assessment. Would you like me to add it to your calendar?')
 	conv.ask(new Suggestions('Yes', 'No'));
 	conv.ask(new Table({
 	 title: 'INFS3605 Assignment 1 Plan',
@@ -353,7 +353,7 @@ app.intent('assessment.card - yes', (conv) => {
  	 rows: [
    		['Plan and prepare', '3 days', '19 Feb 2019'],
    		['Research and notes', '13 days', '22 Feb 2019'],
-   		['Write first draft', '7 days', '7 Mar 2019'],
+   		['Write first draft', '7 days', '07 Mar 2019'],
    		['Revise and re-draft', '4 days', '14 Mar 2019'],
    		['Final draft and submit', '2 days', '20 Mar 2019'],
   ],
