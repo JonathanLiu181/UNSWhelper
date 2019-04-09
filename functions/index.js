@@ -154,32 +154,10 @@ function sayTimeTableInformation(conv) {
   switch (course) {
     case "INFS1603":
         conv.ask('Hey! Here are the class timetables for INFS1603');
-        conv.ask(new INFS1603table());
-        break;
-    case "INFS1609": 
-        conv.ask('Hey! Here are the class timetables for INFS1609');
-        conv.ask(new INFS1609table());
-        break;
-    case "INFS2605":
-        conv.ask('Hey! Here are the class timetables for INFS2605');
-        conv.ask(new INFS2605table());
-        break;
-    case "INFS3634":
-        conv.ask('Hey! Here are the class timetables for INFS3634');
-        conv.ask(new INFS3634table());
-        break;
-    case "INFS3605":
-        conv.ask('Hey! Here are the class timetables for INFS3605');
-        conv.ask(new INFS3605table());
-        break;
-    }
-}
-
-const INFS1603table = () =>{
-  const table = new Table({
-    dividers:true,
-    columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-    rows: [
+        conv.ask(new Table({
+    	dividers:true,
+    	columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+    	rows: [
           ['INFS1603', 'Lecture', 'Mon 12:00 - 14:00 (Weeks:1-9,11)'],
           ['INFS1603', 'Tutorial', 'W09A  Wed 09:00 - 11:00 (Weeks:1-10)'],
           ['INFS1603', 'Tutorial', 'W11A  Wed 11:00 - 13:00 (Weeks:1-10)'],
@@ -190,16 +168,15 @@ const INFS1603table = () =>{
           ['INFS1603', 'Tutorial', 'W17A  Wed 17:00 - 19:00 (Weeks:1-10)'],
           ['INFS1603', 'Tutorial', 'W17B  Wed 17:00 - 19:00 (Weeks:1-10)'],
           ['INFS1603', 'Tutorial', 'W19A  Wed 19:00 - 21:00 (Weeks:1-10)'],
-    ],
-  });
-  return table;
-};
-
-const INFS1609table = () =>{
-  const table = new Table({
-    dividers:true,
-    columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-    rows: [
+    	],
+  	}));
+        break;
+    case "INFS1609": 
+        conv.ask('Hey! Here are the class timetables for INFS1609');
+        conv.ask(new Table({
+   	dividers:true,
+    	columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+    	rows: [
           ['INFS1609', 'Lecture', 'Tue 11:00 - 13:00 (Weeks:1-10)'],
           ['INFS1609', 'Tutorial', 'ue 17:00 - 19:00 (Weeks:11), Thu 17:00 - 19:00 (Weeks:1-9)'],
           ['INFS1609', 'Tutorial', 'Tue 17:00 - 19:00 (Weeks:11), Thu 17:00 - 19:00 (Weeks:1-9)'],
@@ -212,16 +189,15 @@ const INFS1609table = () =>{
           ['INFS1609', 'Tutorial', 'Wed 09:00 - 11:00 (Weeks:1-10)'],
           ['INFS1609', 'Tutorial', 'Wed 18:00 - 20:00 (Weeks:1-10)'],
           ['INFS1609', 'Tutorial', 'Wed 18:00 - 20:00 (Weeks:1-10)'],
-    ],
-  });
-  return table;
-};
-
-const INFS2605table = () =>{
-  const table = new Table({
-    dividers:true,
-    columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-    rows: [
+    	],
+  	}));
+        break;
+    case "INFS2605":
+        conv.ask('Hey! Here are the class timetables for INFS2605');
+        conv.ask(new Table({
+   	dividers:true,
+    	columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+    	rows: [
           ['INFS2605', 'Lecture', 'Tue 16:00 - 17:00 (Weeks:1-10)'],
           ['INFS2605', 'Tutorial', 'Wed 11:00 - 13:00 (Weeks:11), Fri 11:00 - 13:00 (Weeks:1-8), Fri 11:00 - 13:00 (Weeks:10)'],
           ['INFS2605', 'Tutorial', 'Tue 09:00 - 11:00 (Weeks:11), Thu 09:00 - 11:00 (Weeks:1-9)'],
@@ -232,38 +208,36 @@ const INFS2605table = () =>{
           ['INFS2605', 'Tutorial', 'Wed 11:00 - 13:00 (Weeks:1-10)'],
           ['INFS2605', 'Tutorial', 'Wed 13:00 - 15:00 (Weeks:1-10)'],
           ['INFS2605', 'Tutorial', 'Wed 18:00 - 20:00 (Weeks:1-10)'],
-    ],
-  });
-  return table;
-};
-
-const INFS3634table = () =>{
-  const table = new Table({
-    dividers:true,
-    columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-    rows: [
+    	],
+  	}));
+        break;
+    case "INFS3634":
+        conv.ask('Hey! Here are the class timetables for INFS3634');
+        conv.ask(new Table({
+    	dividers:true,
+   	columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+    	rows: [
           ['INFS3634', 'Lecture',  'Mon 09:00 - 10:00 (Weeks:1-9,11)'],
           ['INFS3634', 'Tutorial', 'Mon 12:00 - 14:00 (Weeks:1-9), Mon 12:00 - 14:00 (Weeks:11)'],
           ['INFS3634', 'Tutorial', 'Tue 16:00 - 18:00 (Weeks:1-10)'],
           ['INFS3634', 'Tutorial', 'Tue 18:00 - 20:00 (Weeks:1-10)'],
        
-    ],
-  });
-  return table;
-};
-
-const INFS3605table = () =>{
-  const table = new Table({
-    dividers:true,
-    columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-    rows: [
+    	  ],
+  	  }));
+        break;
+    case "INFS3605":
+        conv.ask('Hey! Here are the class timetables for INFS3605');
+        conv.ask(new Table({
+    	dividers:true,
+    	columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+    	rows: [
           ['INFS3605', 'Lecture',  'Wed 16:00 - 18:00 (Weeks:1-10)'],
        
-    ],
-  });
-  return table;
-};
-
+   	  ],
+  	}));
+        break;
+    }
+}
 
 const term1list = () => {
   const list = new List({
