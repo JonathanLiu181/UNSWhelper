@@ -46,7 +46,7 @@ const calendar = google.calendar('v3');
 process.env.DEBUG = 'dialogflow:*'; // It enables lib debugging statements
 
 const timeZone = 'Australia/Sydney';  // Change it to your time zone
-const timeZoneOffset = '+11:00';         // Change it to your time zone offset
+const timeZoneOffset = '+10:00';         // Change it to your time zone offset
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
   const agent = new WebhookClient({ request, response });
