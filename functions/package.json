@@ -1,19 +1,23 @@
 {
-  "name": "functions",
-  "description": "Cloud Functions for Firebase",
+  "name": "DialogflowFirebaseWebhook",
+  "description": "Firebase Webhook dependencies for a Dialogflow agent.",
+  "version": "0.0.1",
+  "private": true,
+  "license": "Apache Version 2.0",
+  "author": "Google Inc.",
+  "engines": {
+    "node": "6"
+  },
   "scripts": {
-    "serve": "firebase serve --only functions",
-    "shell": "firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "lint": "semistandard --fix \"**/*.js\"",
+    "start": "firebase deploy --only functions",
+    "deploy": "firebase deploy --only functions"
   },
   "dependencies": {
-    "actions-on-google": "2.2.0",
-    "dialogflow-fulfillment": "0.5.0",
-    "firebase-admin": "^5.13.1",
     "firebase-functions": "^2.0.2",
-    "googleapis": "^27.0.0"
-  },
-  "private": true
+    "firebase-admin": "^5.13.1",
+    "googleapis": "^27.0.0",
+    "actions-on-google": "2.2.0",
+    "dialogflow-fulfillment": "0.5.0"
+  }
 }

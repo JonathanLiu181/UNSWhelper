@@ -48,27 +48,19 @@ process.env.DEBUG = 'dialogflow:*'; // It enables lib debugging statements
 const timeZone = 'Australia/Sydney';  // Change it to your time zone
 const timeZoneOffset = '+10:00';         // Change it to your time zone offset
 
-exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
-  const agent = new WebhookClient({ request, response });
+app.intent('Make Appointment', (conv) => {
+  var sessionContext = conv.contexts.get('session-vars');
+  const appointmentDuration = 1;// Define the length of the appointment to be one hour.
+  const dateTimeStart = convertParametersDate(sessionContext.parameters.date, sessionContext.parameters.time);
+  const dateTimeEnd = addHours(dateTimeStart, appointmentDuration);
+  const appointmentTimeString = getLocaleTimeString(dateTimeStart);
+  const appointmentDateString = getLocaleDateString(dateTimeStart);
 
-  function makeAppointment (agent) {
-    // Use the Dialogflow's date and time parameters to create Javascript Date instances, 'dateTimeStart' and 'dateTimeEnd',
-    // which are used to specify the appointment's time.
-    const appointmentDuration = 1;// Define the length of the appointment to be one hour.
-    const dateTimeStart = convertParametersDate(agent.parameters.date, agent.parameters.time);
-    const dateTimeEnd = addHours(dateTimeStart, appointmentDuration);
-    const appointmentTimeString = getLocaleTimeString(dateTimeStart);
-    const appointmentDateString = getLocaleDateString(dateTimeStart);
-    // Check the availability of the time slot and set up an appointment if the time slot is available on the calendar
-    return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
-      agent.add(`Got it. I have your appointment scheduled on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
+  return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
+      conv.ask(`Got it. I have your appointment scheduled on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
     }).catch(() => {
-      agent.add(`Sorry, we're booked on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
+      conv.ask(`Sorry, we're booked on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
     });
-  }
-  let intentMap = new Map();
-  intentMap.set('Make Appointment', makeAppointment);  // It maps the intent 'Make Appointment' to the function 'makeAppointment()'
-  agent.handleRequest(intentMap);
 });
 
 function createCalendarEvent (dateTimeStart, dateTimeEnd) {
@@ -86,7 +78,7 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
         // Create an event for the requested time period
         calendar.events.insert({ auth: serviceAccountAuth,
           calendarId: calendarId,
-          resource: {summary: 'Bike Appointment',
+          resource: {summary: 'Assessment reminder',
             start: {dateTime: dateTimeStart},
             end: {dateTime: dateTimeEnd}}
         }, (err, event) => {
