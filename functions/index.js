@@ -57,9 +57,9 @@ app.intent('Make Appointment', (conv) => {
   const appointmentDateString = getLocaleDateString(dateTimeStart);
 
   return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
-      conv.ask(`Got it. I have your appointment scheduled on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
+      conv.ask(`Got it. I've set a reminder for you on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
     }).catch(() => {
-      conv.ask(`Sorry, we're booked on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
+      conv.ask(`Sorry, I've already set a reminder for you on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
     });
 });
 
@@ -78,7 +78,7 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
         // Create an event for the requested time period
         calendar.events.insert({ auth: serviceAccountAuth,
           calendarId: calendarId,
-          resource: {summary: 'Assessment reminder',
+          resource: {summary: 'Assessment Reminder',
             start: {dateTime: dateTimeStart},
             end: {dateTime: dateTimeEnd}}
         }, (err, event) => {
