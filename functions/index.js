@@ -56,14 +56,14 @@ app.intent('Make Appointment', (conv) => {
   const appointmentTimeString = getLocaleTimeString(dateTimeStart);
   const appointmentDateString = getLocaleDateString(dateTimeStart);
 
-  return createCalendarEvent(dateTimeStart, dateTimeEnd).then(() => {
+  return createCalendarEvent('Assessment Reminder', dateTimeStart, dateTimeEnd).then(() => {
       conv.ask(`Got it. I've set a reminder for you on ${appointmentDateString} at ${appointmentTimeString}. See you soon. Good-bye.`);
     }).catch(() => {
       conv.ask(`Sorry, I've already set a reminder for you on ${appointmentDateString} at ${appointmentTimeString}. Is there anything else I can do for you?`);
     });
 });
 
-function createCalendarEvent (dateTimeStart, dateTimeEnd) {
+function createCalendarEvent (title, dateTimeStart, dateTimeEnd) {
   return new Promise((resolve, reject) => {
     calendar.events.list({  // List all events in the specified time period
       auth: serviceAccountAuth,
@@ -78,7 +78,7 @@ function createCalendarEvent (dateTimeStart, dateTimeEnd) {
         // Create an event for the requested time period
         calendar.events.insert({ auth: serviceAccountAuth,
           calendarId: calendarId,
-          resource: {summary: 'Assessment Reminder',
+          resource: {summary: title,
             start: {dateTime: dateTimeStart},
             end: {dateTime: dateTimeEnd}}
         }, (err, event) => {
@@ -327,6 +327,19 @@ const term3list = () => {
 app.intent('assessment.timeline', (conv) => {
 	conv.ask('Here are the assessments you have this semester. Good luck!');
 	conv.ask(assessmentTimelineList());
+  conv.ask(new Suggestions('Add these to my calendar'));
+ });
+
+app.intent('assessment.timeline - custom', (conv) => {
+  createCalendarFunction('FINS2643 Mid-Sem (20%)', '2019-03-16T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3617 Exam (15%)', '2019-03-17T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 1 (25%)', '2019-03-20T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3617 Group Report (15%)', '2019-04-10T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 2 (30%)', '2019-04-17T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Group Project (30%)', '2019-04-24T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('FINS2643 FinanciaL Plan (10%)', '2019-04-26T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  conv.ask(assessmentTimelineList());
+  conv.ask('The assessments have been added to your calendar.');
  });
 
 app.intent('assessment.card', (conv, params, option) => {
@@ -351,6 +364,23 @@ app.intent('assessment.card - yes', (conv) => {
   ],
 }))
 });
+
+app.intent('assessment.card - yes - yes', (conv) => {
+  createCalendarFunction('INFS3605 Assignment 1 - Plan and prepare', '2019-02-19T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 1 - Research and notes', '2019-02-22T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 1 - Write first draft', '2019-03-07T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 1 - Revise and re-draft', '2019-03-14T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  createCalendarFunction('INFS3605 Assignment 1 - Final draft and submit', '2019-03-20T12:00:00+10:00', '2019-04-21T09:00:00+10:00', 1);
+  conv.ask('The plan has been added to your calendar.');
+});
+
+function createCalendarFunction(title, date, time, appointmentDuration) {
+  const dateTimeStart = convertParametersDate(date, time);
+  const dateTimeEnd = addHours(dateTimeStart, appointmentDuration);
+  const appointmentTimeString = getLocaleTimeString(dateTimeStart);
+  const appointmentDateString = getLocaleDateString(dateTimeStart);
+  return createCalendarEvent(title, dateTimeStart, dateTimeEnd);
+}
 
 app.intent('terms', (conv) => {
 	conv.ask('Sure. What would you like to know about the new terms system at UNSW?');
@@ -379,7 +409,7 @@ app.intent('terms.fallback', (conv) => {
 
 
 app.intent('course.duoquiz.start', (conv) => {
-	conv.ask('Lets begin! ' + getPlayerName(conv) + 's turn first.');
+	conv.ask('Let\'s begin! ' + getPlayerName(conv) + 's turn first.');
 	sayQuestionDuo(conv);
 });
 
@@ -518,7 +548,7 @@ function sayQuestion(conv) {
 						    		conv.ask(new Suggestions('Development Team', 'Product Owner', 'Scrum Master'));
 						    		break;
 						    	case 4:
-						    		conv.ask('True or False: The Product Owners responsibility is to work with stakeholders to determine product features.');
+						    		conv.ask('True or False: The Product Owner\'s responsibility is to work with stakeholders to determine product features.');
 						    		conv.ask(new Suggestions('True', 'False'));
 						    		break;
 						    	case 5:
@@ -530,49 +560,49 @@ function sayQuestion(conv) {
 						case "medium":
 							switch (questionNumber) {
 								case 1:
-									conv.ask('infs3605w1q1medium');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 2:
-									conv.ask('infs3605w1q2medium');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 3:
-									conv.ask('infs3605w1q3medium');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 4:
-						    		conv.ask('infs3605w1q4medium');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 5:
-						    		conv.ask('infs3605w1q5medium');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
+                  conv.ask('True or False: The Daily Scrum should be skipped if there is nothing interesting to talk about.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
+                  case 2:
+                  conv.ask('What should be created during the first half of the Sprint Planning Meeting?');
+                    conv.ask(new Suggestions('Sprint Goal', 'Sprint Backlog', 'Product Backlog'));
+                    break;
+                  case 3:
+                  conv.ask('Who is allowed to change the Sprint Backlog during the sprint?');
+                    conv.ask(new Suggestions('Development Team', 'Product Owner', 'Scrum Master'));
+                    break;
+                  case 4:
+                    conv.ask('True or False: The Product Owner\'s responsibility is to work with stakeholders to determine product features.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
+                  case 5:
+                    conv.ask('True or False: A characteristic of a Scrum Master is to be supportive.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
 						    }
 						    break;
 						case "hard":
 							switch (questionNumber) {
-								case 1:
-									conv.ask('infs3605w1q1hard');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 2:
-									conv.ask('infs3605w1q2hard');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 3:
-									conv.ask('infs3605w1q3hard');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 4:
-						    		conv.ask('infs3605w1q4hard');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
-						    	case 5:
-						    		conv.ask('infs3605w1q5hard');
-						    		conv.ask(new Suggestions('suggestion 1', 'suggestion 2', 'suggestion 3'));
-						    		break;
+                case 1:
+                  conv.ask('True or False: The Daily Scrum should be skipped if there is nothing interesting to talk about.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
+                  case 2:
+                  conv.ask('What should be created during the first half of the Sprint Planning Meeting?');
+                    conv.ask(new Suggestions('Sprint Goal', 'Sprint Backlog', 'Product Backlog'));
+                    break;
+                  case 3:
+                  conv.ask('Who is allowed to change the Sprint Backlog during the sprint?');
+                    conv.ask(new Suggestions('Development Team', 'Product Owner', 'Scrum Master'));
+                    break;
+                  case 4:
+                    conv.ask('True or False: The Product Owner\'s responsibility is to work with stakeholders to determine product features.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
+                  case 5:
+                    conv.ask('True or False: A characteristic of a Scrum Master is to be supportive.');
+                    conv.ask(new Suggestions('True', 'False'));
+                    break;
 						    }
 						    break;
 					}
@@ -720,7 +750,7 @@ function sayCorrectDuo(conv) {
 	if (questionNumber == "x" ) {
 		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Correct!</speak>`);
 	} else {
-		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Correct! ` + getPlayerName(conv) + 's turn.</speak>');
+		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Correct! ` + getPlayerName(conv) + '\'s turn.</speak>');
 	}
 }
 
@@ -732,7 +762,7 @@ function sayIncorrectDuo(conv) {
 	if (questionNumber == "x" ) {
 		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Incorrect.</speak>`);
 	} else {
-		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Incorrect. ` + getPlayerName(conv) + 's turn.</speak>');
+		conv.ask(`<speak><audio src="${audioSound}" clipEnd="2s"></audio>Incorrect. ` + getPlayerName(conv) + '\'s turn.</speak>');
 	}
 }
 
@@ -869,7 +899,15 @@ const assessmentTimelineList = () => {
     // Add the first item to the list
     'FINS2643 Mid-Sem (20%)': {
       title: 'FINS2643 Mid-Sem (20%)',
-      description: 'Date: 19 March 2019',
+      description: '16 March 2019',
+      image: new Image({
+        url: 'https://i.imgur.com/kzSAODd.png',
+        alt: 'Individual',
+      }),
+    },
+    'INFS3617 Exam (15%)': {
+      title: 'INFS3617 Exam (15%)',
+      description: '17 March 2019',
       image: new Image({
         url: 'https://i.imgur.com/kzSAODd.png',
         alt: 'Individual',
@@ -877,7 +915,7 @@ const assessmentTimelineList = () => {
     },
     'INFS3605 Assignment 1 (25%)': {
       title: 'INFS3605 Assignment 1 (25%)',
-      description: 'Date: 20 March 2019',
+      description: '20 March 2019',
       image: new Image({
         url: 'https://i.imgur.com/kzSAODd.png',
         alt: 'Individual',
@@ -885,7 +923,7 @@ const assessmentTimelineList = () => {
     },
     'INFS3617 Group Report (15%)': {
       title: 'INFS3617 Group Report (15%)',
-      description: 'Date: 10 April 2019',
+      description: '10 April 2019',
       image: new Image({
         url: 'https://i.imgur.com/R5JVX4S.png',
         alt: 'Group',
@@ -894,7 +932,7 @@ const assessmentTimelineList = () => {
     // Add the second item to the list
     'INFS3605 Assignment 2 (30%)': {
       title: 'INFS3605 Assignment 2 (30%)',
-      description: 'Date: 17 April 2019',
+      description: '17 April 2019',
       image: new Image({
         url: 'https://i.imgur.com/kzSAODd.png',
         alt: 'Individual',
@@ -903,7 +941,7 @@ const assessmentTimelineList = () => {
     // Add the third item to the list
     'INFS3605 Group Project (30%)': {
       title: 'INFS3605 Group Project (30%)',
-      description: 'Date: 24 April 2019',
+      description: '24 April 2019',
       image: new Image({
         url: 'https://i.imgur.com/R5JVX4S.png',
         alt: 'Group',
@@ -911,7 +949,7 @@ const assessmentTimelineList = () => {
     },
     'FINS2643 Financial Plan (10%)': {
       title: 'FINS2643 Financial Plan (10%)',
-      description: 'Date: 26 April 2019',
+      description: '26 April 2019',
       image: new Image({
         url: 'https://i.imgur.com/kzSAODd.png',
         alt: 'Individual',
@@ -924,17 +962,17 @@ const assessmentTimelineList = () => {
 const assessmentMap = {
   'INFS3605 Assignment 1 (25%)' : {
     title: 'INFS3605 Assignment 1 (25%)', 
-    subtitle: 'Date: 20 March 2019',
+    subtitle: '20 March 2019',
     text: 'For this assessment you are expected to provide a comprehensive report, detailing the skills development that you have engaged in during the discovery phase and also intend to complete during the rest of the course.',
   },
   'INFS3605 Assignment 2 (30%)' : {
     title: 'INFS3605 Assignment 2 (30%)',
-    subtitle: 'Date: 17 April 2019',
+    subtitle: '17 April 2019',
     text: 'For this assessment you are expected to provide a comprehensive report, detailing the skills development that you have engaged in during the discovery phase and also intend to complete during the rest of the course.',
   },
    'INFS3605 Group Project (30%)' : {
     title: 'INFS3605 Group Project (30%)',
-    subtitle: 'Date: 24 April 2019',
+    subtitle: '24 April 2019',
     text: 'For this assessment you are expected to provide a comprehensive report, detailing the skills development that you have engaged in during the discovery phase and also intend to complete during the rest of the course.',
   },
 };
@@ -1138,6 +1176,111 @@ const infs3605week2reviewcontent = {
 
   },
   },
+};
+
+app.intent('career.events', (conv) => {
+  conv.ask('Here are some upcoming careers events.');
+  conv.ask(careerEventCarousel());
+});
+
+const careerEventCarousel = () => {
+  const carousel = new Carousel({
+   items: {
+     'Writing a Successful Resume and Cover Letter': {
+       title: 'Writing a Successful Resume and Cover Letter',
+       description: 'Wed 24 Apr 2019',
+       image: new Image({
+         url: 'https://www.careers.unsw.edu.au/portals/0/UploadedFiles/images/Carousel/EP_Web_Banners.jpg?ver=2019-02-15-144642-450?1555665772247',
+         alt: 'Indigo Taco Color',
+       }),
+     },
+     'BITSA Inter-University Networking Night': {
+       title: 'BITSA Inter-University Networking Night',
+       description: 'Fri 26 Apr 2019',
+       image: new Image({
+         url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/54730528_2597540820319808_8644123197941219328_o.jpg?_nc_cat=104&_nc_ht=scontent-syd2-1.xx&oh=19f7f8ba1978e1cd98512050dbbcd62f&oe=5D3911D2',
+         alt: 'Pink Unicorn Color',
+       }),
+     },
+     'BITSA x Microsoft Design Thinking in Protégé Workshop': {
+       title: 'BITSA x Microsoft Design Thinking in Protégé Workshop',
+       description: 'Sat 27 Apr 2019',
+       image: new Image({
+         url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/53347533_2577005589039998_6977051690906157056_o.jpg?_nc_cat=106&_nc_ht=scontent-syd2-1.xx&oh=9634f1395e0b1bfb9568a8ee7343802f&oe=5D2F1279',
+         alt: 'Blue Grey Coffee Color',
+       }),
+     },
+     'Assessment Centres': {
+       title: 'Assessment Centres',
+       description: 'Tue 30 Apr 2019',
+       image: new Image({
+         url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/44985130_10156583604328080_8957539318151249920_o.jpg?_nc_cat=103&_nc_ht=scontent-syd2-1.xx&oh=0e2b04d3e5fbc431b213232da8dd7889&oe=5D3EDB8E',
+         alt: 'Blue Grey Coffee Color',
+       }),
+     },
+     'Ace the Interview!': {
+       title: 'Ace the Interview!',
+       description: 'Thu 02 May 2019',
+       image: new Image({
+         url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/48087594_10156685692198080_8233022186932142080_o.jpg?_nc_cat=104&_nc_ht=scontent-syd2-1.xx&oh=f8b613663c74795ead0d82b08d7b683d&oe=5D391965',
+         alt: 'Blue Grey Coffee Color',
+       }),
+     },
+ }});
+ return carousel;
+};
+
+app.intent('career.events.details', (conv, params, option) => {
+  conv.ask(`Here are the details for the event.`, new BasicCard(careerEventMap[option]));
+});
+
+//mapping of 3605 weekly summary
+const careerEventMap = {
+  'Writing a Successful Resume and Cover Letter': {
+    subtitle: 'Wed 24 Apr 2019, 1:00pm - 3:00pm',
+    title: 'Writing a Successful Resume and Cover Letter',
+    text: 'In this seminar you will learn how to structure and format your resume and cover letter. You will increase your understanding of how your resume and cover letter are used in the job search process and learn how to showcase your skills and experiences to employers.',
+    image : {
+      url: 'https://www.careers.unsw.edu.au/portals/0/UploadedFiles/images/Carousel/EP_Web_Banners.jpg?ver=2019-02-15-144642-450?1555665772247',
+      accessibilityText: 'Agile Scrum',
+  },
+  }, 
+  'BITSA Inter-University Networking Night': {
+    subtitle: 'Fri 26 Apr 2019, 6:00pm - 8:00pm',
+    title: 'BITSA Inter-University Networking Night',
+    text: 'Join our annual collaboration with UNSW BITSA, USYD SYNCS and UTS TechSoc for a networking night that will leave a lasting impression on you. Come for the food and drinks, stay for the networking!',
+    image : {
+      url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/54730528_2597540820319808_8644123197941219328_o.jpg?_nc_cat=104&_nc_ht=scontent-syd2-1.xx&oh=19f7f8ba1978e1cd98512050dbbcd62f&oe=5D3911D2',
+      accessibilityText: 'x',
+  },
+  },
+  'BITSA x Microsoft Design Thinking in Protégé Workshop': {
+    subtitle: 'Sat 27 Apr 2019, 2:00pm - 4:00pm',
+    title: 'BITSA x Microsoft Design Thinking in Protégé Workshop',
+    text: 'Join us on campus for our BITSA x Microsoft Design Thinking workshop! This interactive session complements Microsoft’s Annual Protege Competition - a nation-wide opportunity that prompts students to tackle a real-world challenge within teams.',
+    image : {
+      url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/53347533_2577005589039998_6977051690906157056_o.jpg?_nc_cat=106&_nc_ht=scontent-syd2-1.xx&oh=9634f1395e0b1bfb9568a8ee7343802f&oe=5D2F1279',
+      accessibilityText: 'x',
+  },
+  }, 
+  'Assessment Centres': {
+    subtitle: 'Tue 30 Apr 2019, 11:00am - 1:00pm',
+    title: 'Assessment Centres',
+    text: 'Come up with creative strategies on how to spread the word on programs, initiatives and events the Careers team delivers, including our biggest event of the year - Assessment Centres!',
+    image : {
+      url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/44985130_10156583604328080_8957539318151249920_o.jpg?_nc_cat=103&_nc_ht=scontent-syd2-1.xx&oh=0e2b04d3e5fbc431b213232da8dd7889&oe=5D3EDB8E',
+      accessibilityText: 'x',
+  },
+  }, 
+  'Ace the Interview!': {
+    subtitle: 'Thu 02 May 2019, 10:00am - 12:00pm',
+    title: 'Ace the Interview!',
+    text: 'Do you want to improve your interview skills, decrease your nerves and increase your success? In this seminar you will learn how to prepare for job interviews and practice answering some common interview questions. Learn how to make a positive first impression and find out about different interview styles and questions types. Improve your chances of receiving a job offer!',
+    image : {
+      url: 'https://scontent-syd2-1.xx.fbcdn.net/v/t1.0-9/48087594_10156685692198080_8233022186932142080_o.jpg?_nc_cat=104&_nc_ht=scontent-syd2-1.xx&oh=f8b613663c74795ead0d82b08d7b683d&oe=5D391965',
+      accessibilityText: 'x',
+  },
+  }, 
 };
 
 // Set the DialogflowApp object to handle the HTTPS POST request.
