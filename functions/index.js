@@ -120,6 +120,11 @@ app.intent('course.timetable', (conv) => {
   sayTimeTableInformation(conv);
 });
 
+app.intent('weekly.homework', (conv) => {
+  var sessionContext = conv.contexts.get('session-vars');
+  sayHomework(conv);
+});
+
 
 function sayTermInformation(conv) {
   var sessionContext = conv.contexts.get('session-vars');
@@ -136,6 +141,62 @@ function sayTermInformation(conv) {
       case "Term 3":
         conv.ask('Hey! Here are the key academic dates for Term 3');
         conv.ask(term3list());
+        break;
+    }
+}
+
+
+function sayHomework(conv) {
+  var sessionContext = conv.contexts.get('session-vars');
+  var week = sessionContext.parameters.week;
+  switch (week) {
+    case "week 1":
+        conv.ask('Hey! Here are your tasks for week 1!');
+        conv.ask(new Table({
+      dividers:true,
+      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+      rows: [
+          columns:['Task', 'Due Date'],
+      rows: [
+          ['TASK 1', 'DUE DATE'],
+      ],
+    }));
+        break;
+    case "week 2":
+        conv.ask('Hey! Here are your tasks for week 2!');
+        conv.ask(new Table({
+    dividers:true,
+      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+      rows: [
+          columns:['Task', 'Due Date'],
+      rows: [
+          ['TASK 1', 'DUE DATE'],
+      ],
+    }));
+        break;
+    case "week 3":
+        conv.ask('Hey! Here are your tasks for week 3!');
+        conv.ask(new Table({
+      dividers:true,
+   columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+      rows: [
+          columns:['Task', 'Due Date'],
+      rows: [
+          ['TASK 1', 'DUE DATE'],
+      ],
+    }));
+        break;
+    case "week 4":
+        conv.ask('Hey! Here are your tasks for week 4!');
+        conv.ask(new Table({
+      dividers:true,
+      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
+      rows: [
+          columns:['Task', 'Due Date'],
+      rows: [
+          ['TASK 1', 'DUE DATE'],
+      ],
+    }));
         break;
     }
 }
