@@ -154,9 +154,7 @@ function sayHomework(conv) {
         conv.ask('Hey! Here are your tasks for week 1!');
         conv.ask(new Table({
       dividers:true,
-      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-      rows: [
-          columns:['Task', 'Due Date'],
+      columns:['Task', 'Due Date'],
       rows: [
           ['TASK 1', 'DUE DATE'],
       ],
@@ -166,9 +164,8 @@ function sayHomework(conv) {
         conv.ask('Hey! Here are your tasks for week 2!');
         conv.ask(new Table({
     dividers:true,
-      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-      rows: [
-          columns:['Task', 'Due Date'],
+     
+      columns:['Task', 'Due Date'],
       rows: [
           ['TASK 1', 'DUE DATE'],
       ],
@@ -178,9 +175,8 @@ function sayHomework(conv) {
         conv.ask('Hey! Here are your tasks for week 3!');
         conv.ask(new Table({
       dividers:true,
-   columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-      rows: [
-          columns:['Task', 'Due Date'],
+   
+      columns:['Task', 'Due Date'],
       rows: [
           ['TASK 1', 'DUE DATE'],
       ],
@@ -190,9 +186,7 @@ function sayHomework(conv) {
         conv.ask('Hey! Here are your tasks for week 4!');
         conv.ask(new Table({
       dividers:true,
-      columns:['Course', 'Lecture/Tutorial', 'Day & Time'],
-      rows: [
-          columns:['Task', 'Due Date'],
+      columns:['Task', 'Due Date'],
       rows: [
           ['TASK 1', 'DUE DATE'],
       ],
