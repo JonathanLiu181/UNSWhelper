@@ -17,7 +17,6 @@ const functions = require('firebase-functions');
 // Instantiate the Dialogflow client.
 const app = dialogflow({debug: true});
 const {google} = require('googleapis');
-const {WebhookClient} = require('dialogflow-fulfillment');
 
 // Enter your calendar ID and service account JSON below.
 const calendarId = '77arp38uphhnsbkteuvbkequsc@group.calendar.google.com'; // Example: 6ujc6j6rgfk02cp02vg6h38cs0@group.calendar.google.com
@@ -149,6 +148,7 @@ function sayTermInformation(conv) {
 function sayHomework(conv) {
   var sessionContext = conv.contexts.get('session-vars');
   var week = sessionContext.parameters.week;
+  /*
   switch (week) {
     case "week 1":
         conv.ask('Hey! Here are your tasks for week 1!');
@@ -199,6 +199,7 @@ function sayHomework(conv) {
     }));
         break;
     }
+    */
 }
 
 function sayTimeTableInformation(conv) {
