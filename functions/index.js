@@ -471,7 +471,7 @@ app.intent('terms.fallback', (conv) => {
 
 
 app.intent('course.duoquiz.start', (conv) => {
-	conv.ask('Let\'s begin! ' + getPlayerName(conv) + 's turn first.');
+	conv.ask('Let\'s begin! ' + getPlayerName(conv) + '\'s turn first.');
 	sayQuestionDuo(conv);
 });
 
